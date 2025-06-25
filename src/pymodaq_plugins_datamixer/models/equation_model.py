@@ -50,12 +50,13 @@ class DataMixerModelEquation(DataMixerModel):
         formulae = split_formulae(self.get_formulae())
         dte_processed = DataToExport('Computed')
         for ind, formula in enumerate(formulae):
-            try:
-                dwa = self.compute_formula(formula, dte,
-                                           name=f'Formula_{ind:03.0f}')
-                dte_processed.append(dwa)
-            except Exception as e:
-                pass
+            if formula.strip():     # Discard empty formulae
+                try:
+                    dwa = self.compute_formula(formula, dte,
+                                               name=f'Formula_{ind:03.0f}')
+                    dte_processed.append(dwa)
+                except Exception as e:
+                    pass
         return dte_processed
 
     def compute_formula(self, formula: str, dte: DataToExport,
